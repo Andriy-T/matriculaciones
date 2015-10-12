@@ -7,4 +7,4 @@ source(file.path(pathHome, "librerias.R"))
 # cargar funciones
 source(file.path(pathHome, "funciones.R"))
 # cargar data
-# source(file.path(pathHome, "data.R"))
+source(file.path(pathHome, "data_v2.R"))
