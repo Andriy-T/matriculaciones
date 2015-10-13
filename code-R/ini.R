@@ -1,10 +1,10 @@
 
 
-pathHome <- "C:/Users/Andrey/Documents/Matriculaciones/matric_proj/ShinyApp"
+DirCode <- "C:/Users/Andrey/Documents/GitHub/matriculaciones/code-R"
 
 # cargar librerias
-source(file.path(pathHome, "librerias.R"))
+source(file.path(DirCode, "librerias.R"))
 # cargar funciones
-source(file.path(pathHome, "funciones.R"))
+source(file.path(DirCode, "funciones.R"))
 # cargar data
-source(file.path(pathHome, "data_v2.R"))
+source(file.path(DirCode, "data.R"))
