@@ -1,10 +1,18 @@
+# fichero a ejecutar al iniciarla sesión
 
-
+# DirCode <- "C:/Users/Alfonso/Documents/GitHub/matriculaciones/code-R"  # ¡¡¡ cambiar
 DirCode <- "C:/Users/Andrey/Documents/GitHub/matriculaciones/code-R"
 
+#### directorio Proyecto y librerias ####
+# DirPro  <- "C:/Users/Alfonso/Dropbox/proyectos/dgt"
+DirPro  <- "C:/Users/Andrey/Dropbox/dgt"
+
+CargaIniPro <- TRUE # si CargaIniPro es TRUE cargamos las funciones y datos
+                    # en otro caso solamente se cargan las librerías
+
 # cargar librerias
-source(file.path(DirCode, "librerias.R"))
+if(!CargaIniPro) source(file.path(DirCode, "librerias.R"))
 # cargar funciones
-source(file.path(DirCode, "funciones.R"))
+if(CargaIniPro) source(file.path(DirCode, "funciones.R"))
 # cargar data
-source(file.path(DirCode, "data.R"))
+if(CargaIniPro) source(file.path(DirCode, "data.R"))

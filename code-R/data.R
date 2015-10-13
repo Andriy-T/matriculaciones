@@ -9,16 +9,6 @@
 # tabla resultante tiene que llevar todo lo necesaria para la app
 # posteriores filtros sobre la tabla se realizan en shiny server.R
 
-# ruta de datos en dropbox
-
-#### directorio Proyecto y librerias ####
-DirPro  <- "C:/Users/Alfonso/Dropbox/proyectos/dgt"
-#DirPro  <- "C:/Users/Andrey/Dropbox/dgt"
-
-CargaIniPro = TRUE # si CargaIniPro es TRUE carga el fichero de inicio del proyecto 
-if (!( "IniPro" %in% ls(pattern = "IniPro")) | CargaIniPro == TRUE) 
-    source(file.path(DirPro, "ini.R"))
-
 #### Parametros ####
 DirDat   <- file.path(DirPro, "data" )
 fichAux  <- "tablas_aux.rds" 
@@ -41,18 +31,20 @@ data_aux <- readRDS(file.path(DirDat, fichAux))
 
 
 # tabla de modelos
-# data_modelos <- 
-#     read.xlsx(file.path(DirDat, HojMod, fichMod)
-#               , sheetIndex = 3, startRow = 1, endRow = 154, colIndex = 1:3
-#               , header = T, stringsAsFactors = F)
+data_modelos <- 
+    read.xlsx(file.path(DirDat, HojMod, fichMod)
+              , sheetIndex = 3, startRow = 1, endRow = 154, colIndex = 1:3
+              , header = T, stringsAsFactors = F)
 
 # raw data
-
+data_all <- 
+    readRDS(file.path(DirDat, "dat201412201503.rds"))
+setDT(data_all)
 
 # data_all <- data_all[COD_CLASE_MAT==0]
 
 # eliminacion de varios registros por vehi?culo
-# data_all[,BASTIDOR := as.character(BASTIDOR)]
+data_all[,BASTIDOR := as.character(BASTIDOR)]
 
 bast_resto <- data_all[nchar(as.character(gsub("^\\s+|\\s+$", "",BASTIDOR)))!=17,]
 bast_17 <- data_all[nchar(as.character(gsub("^\\s+|\\s+$", "",BASTIDOR)))==17,]
@@ -90,7 +82,8 @@ data_set_turismos[,.N, by= CLASIFICACION_REGLAMENTO_VEHICULOS][order(N, decreasi
 
 
 data_set_def <- data_set_turismos[,col_sel, with=F]
-
+rm(data_set, data_set_turismos)
+gc()
 # filtraremos por marca/modelo
 
 # data_set_modelos <- 
