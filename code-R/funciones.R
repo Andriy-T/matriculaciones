@@ -16,10 +16,10 @@ func.factor.format <- function(data){
 CTE_ToName_sep  <- "." # el separador por defecto de R es "." 
 # lista con las subsituciones a efecturar para eliminar caracters raros
 CTE_ToName  <- list(
-    c("?","a"),c("?","e"),c("?","i"),c("?","o"),c("?","u")
-    ,c("?","A"),c("?","E"),c("?","I"),c("?","O"),c("?","U")
-    ,c(" ",CTE_ToName_sep),c("/",CTE_ToName_sep)
-    ,c("[",CTE_ToName_sep),c("]",CTE_ToName_sep),c("(",CTE_ToName_sep),c(")",CTE_ToName_sep)
+  c("á","a"),c("é","e"),c("í","i"),c("ó","o"),c("ú","u")
+  ,c("Á","A"),c("É","E"),c("Í","I"),c("Ó","O"),c("Ú","U")
+  ,c(" ",CTE_ToName_sep),c("/",CTE_ToName_sep)
+  ,c("[",CTE_ToName_sep),c("]",CTE_ToName_sep),c("(",CTE_ToName_sep),c(")",CTE_ToName_sep)
 )
 
 func.mygsub <- function(x, txt){
