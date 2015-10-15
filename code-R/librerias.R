@@ -25,3 +25,6 @@ library(data.table)
 
 if(!require(xlsx)) install.packages("xlsx")
 library(xlsx)
+
+if(!require(jsonlite)) install.packages("jsonlite")
+library(jsonlite)
