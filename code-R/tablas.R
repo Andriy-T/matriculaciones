@@ -24,7 +24,7 @@ matric_tot_dia <- matric_tot_dia[fecha >= '2014-12-01' &
                                      fecha <= '2015-06-30']
 
 ########################################################################################+
-# Propulsión ----
+# Propulsion ----
 ########################################################################################+
 
 # claves primarias para poder unir las tablas
@@ -46,7 +46,12 @@ tmp_aux[, agrup:=c("Gasolina", "Diesel", "Eléctrico", "Resto"
 # union
 matric_prop_tot <- tmp_aux[matric_prop_tot][, .(DESCRIPCION, N)]
 
-# agrupación
-matric_prop_tot
-
+# Cambio de nombres a las columnas
 setnames(matric_prop_tot, names(matric_prop_tot), c("prop", "matric"))
+
+# Eliminacion de NA
+matric_prop_tot <- na.omit(matric_prop_tot)
+
+# Ordenamos
+matric_prop_tot <- matric_prop_tot[order(matric, decreasing = T)]
+

@@ -1,5 +1,5 @@
 ########################################################+
-# Gráfico temporal de matriculaciones
+# Grafico temporal de matriculaciones
 ########################################################+
 
 # transformamos la tabla para visualizar bien las fechas
@@ -49,3 +49,64 @@ graf.ts_matric$yAxis(
 graf.ts_matric$show("inline", include_assets = FALSE)
 
 graf.ts_matric
+
+########################################################+
+# Graficos descriptivos
+########################################################+
+
+# ------------------------------------------------------+
+# Propulsion --------------
+# ------------------------------------------------------+
+
+Highcharts.setOptions({
+    lang: {
+        decimalPoint: ',',
+        thousandsSep: ' '
+    }
+});
+
+Highcharts$global(lang=list(decimalPoint =","))
+
+matric_prop_tot
+
+graf.dsc.prop <- hPlot(matric ~ prop, data = matric_prop_tot
+                       , type = "pie"
+                       # , options = list(innerSize = "20%")
+                       )
+
+graf.dsc.prop$title(
+    text = 'Matric. por <br>propulsion</br>',
+    align = 'center',
+    verticalAlign = 'middle'
+    , y = -20
+)
+
+graf.dsc.prop$plotOptions(
+    pie = list(
+        dataLabels = list(
+            enabled = T
+            # , distance = -50
+        )
+#         , startAngle = -90
+#         , endAngle = 90
+        # , center = list('50%', '75%')
+        , innerSize = '50%'
+        , allowPointSelect = TRUE
+        , cursor = 'pointer'
+        , dataLabels = list(
+            enabled = TRUE
+        )
+        , showInLegend = TRUE
+        )
+)
+
+graf.dsc.prop$tooltip(
+    pointFormat = paste0("<span style='color:{point.color}'>\u25CF</span>",
+                    "<b>{point.percentage:.1f}%</b><br/>{point.y:,.0f}")
+    # pointFormat = '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y}</b><br/>'
+    # pointFormat = "<b>{point.y}</b>"
+)
+
+graf.dsc.prop$legend(enabled = T)
+
+graf.dsc.prop
