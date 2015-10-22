@@ -58,14 +58,14 @@ graf.ts_matric
 # Propulsion --------------
 # ------------------------------------------------------+
 
-Highcharts.setOptions({
-    lang: {
-        decimalPoint: ',',
-        thousandsSep: ' '
-    }
-});
+# Highcharts.setOptions({
+#     lang: {
+#         decimalPoint: ',',
+#         thousandsSep: ' '
+#     }
+# });
 
-Highcharts$global(lang=list(decimalPoint =","))
+# Highcharts$global(lang=list(decimalPoint =",")) # no funciona
 
 matric_prop_tot
 
