@@ -71,13 +71,18 @@ matric_cilin_tot[, cilin:=as.integer(as.character(cilin))]
 
 hist(matric_cilin_tot$cilin)
 matric_cilin_tot[,tramos := 
-    cut(matric_cilin_tot$cilin, breaks = c(0, 1000, 2000, 3000, 5000))
+    cut(matric_cilin_tot$cilin, breaks = c(0, 1000, 1500, 2000, 5000))
     ]
-
-matric_cilin_tot[, sum(matric), by = tramos]
 
 # Eliminacion de NA
 matric_cilin_tot <- na.omit(matric_cilin_tot)
 
+# Agrupamos los tramos
+matric_cilin_tot <- matric_cilin_tot[, sum(matric), by = tramos]
+
 # Ordenamos
-matric_cilin_tot <- matric_cilin_tot[order(matric, decreasing = T)]
+matric_cilin_tot <- matric_cilin_tot[order(tramos, decreasing = F)]
+
+setnames(matric_cilin_tot, 
+         names(matric_cilin_tot), c("cilin", "matric"))
+

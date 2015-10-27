@@ -110,3 +110,56 @@ graf.dsc.prop$tooltip(
 graf.dsc.prop$legend(enabled = T)
 
 graf.dsc.prop
+
+# ------------------------------------------------------+
+# Cilindrada (ejemplo de bar chart) --------------
+# ------------------------------------------------------+
+
+matric_cilin_tot
+
+graf.dsc.cilin <- hPlot(matric ~ cilin, data = matric_cilin_tot
+                       , type = "column"
+                       # , options = list(innerSize = "20%")
+                       )
+
+graf.dsc.cilin$title(
+    text = 'Matriculaciones por tramo de cilindrada',
+    align = 'center'
+)
+
+graf.dsc.cilin$plotOptions(
+    column = list(
+        colorByPoint = T
+        , dataLabels = list(
+            enabled = T
+        )
+        , allowPointSelect = TRUE
+        , cursor = 'pointer'
+        , dataLabels = list(
+            enabled = TRUE
+            # , rotation = -90
+            # , color = '#FFFFFF'
+            # , align = 'right'
+            # , format = '{point.y:.1f}'
+            # , y = -20 #10 pixels down from the top
+            , style = list(
+                fontSize = '14px'
+                , fontWeight = "bold"
+                , fontFamily = 'Verdana, sans-serif'
+            )
+        )
+        , showInLegend = TRUE
+        )
+)
+
+
+graf.dsc.cilin$yAxis(
+    list(list(title = list(text = ''), min = 0, opposite = F
+              , gridLineWidth = .8, gridLineColor = 'rgba(242,242,242,1)'
+              , startOnTick = F, endOnTick = F
+              # , gridLineDashStyle = "Dot"
+    )
+    )
+)
+
+graf.dsc.cilin
