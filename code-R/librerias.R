@@ -17,7 +17,7 @@ library(devtools)
 if(!require(rCharts)) install_github('rCharts', 'ramnathv')
 library(rCharts)
 
-if(!require(dplyr)) install.packages("dply")
+if(!require(dplyr)) install.packages("dplyr")
 library(dplyr)
 
 if(!require(data.table)) install.packages("data.table")
