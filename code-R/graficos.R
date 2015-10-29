@@ -117,6 +117,8 @@ graf.dsc.prop
 
 matric_cilin_tot
 
+tmp_ylim <- matric_cilin_tot[,max(matric)*1.25]
+
 graf.dsc.cilin <- hPlot(matric ~ cilin, data = matric_cilin_tot
                        , type = "column"
                        # , options = list(innerSize = "20%")
@@ -157,9 +159,76 @@ graf.dsc.cilin$yAxis(
     list(list(title = list(text = ''), min = 0, opposite = F
               , gridLineWidth = .8, gridLineColor = 'rgba(242,242,242,1)'
               , startOnTick = F, endOnTick = F
+              , max = tmp_ylim
               # , gridLineDashStyle = "Dot"
     )
     )
 )
 
 graf.dsc.cilin
+
+
+# ------------------------------------------------------+
+# Potencia en cv (ejemplo de bar chart) --------------
+# ------------------------------------------------------+
+
+matric_powerKW_tot
+
+tmp_ylim <- matric_powerKW_tot[,max(matric)*1.25]
+
+graf.dsc.cv <- hPlot(matric ~ cv, data = matric_powerKW_tot
+                       , type = "column"
+                       # , options = list(innerSize = "20%")
+                       )
+
+graf.dsc.cv$title(
+    text = 'Matriculaciones por tramo de potencia (cv)',
+    align = 'center'
+)
+
+graf.dsc.cv$plotOptions(
+    column = list(
+        colorByPoint = T
+        , dataLabels = list(
+            enabled = T
+        )
+        , allowPointSelect = TRUE
+        , cursor = 'pointer'
+        , dataLabels = list(
+            enabled = TRUE
+            # , rotation = -90
+            # , color = '#FFFFFF'
+            # , align = 'right'
+            # , format = '{point.y:.1f}'
+            # , y = -20 #10 pixels down from the top
+            , style = list(
+                fontSize = '14px'
+                , fontWeight = "bold"
+                , fontFamily = 'Verdana, sans-serif'
+            )
+        )
+        , showInLegend = TRUE
+        )
+)
+
+
+graf.dsc.cv$yAxis(
+    list(list(title = list(text = ''), min = 0, opposite = F
+              , gridLineWidth = .8, gridLineColor = 'rgba(242,242,242,1)'
+              , startOnTick = F, endOnTick = F
+              , max = tmp_ylim
+              # , gridLineDashStyle = "Dot"
+    )
+    )
+)
+
+graf.dsc.cv
+
+
+
+## Borrador -----
+
+# tooltip: {
+#     headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+#     pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+# }

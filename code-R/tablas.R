@@ -86,3 +86,61 @@ matric_cilin_tot <- matric_cilin_tot[order(tramos, decreasing = F)]
 setnames(matric_cilin_tot, 
          names(matric_cilin_tot), c("cilin", "matric"))
 
+########################################################################################+
+# Potencia ----
+########################################################################################+
+
+# por  lo visto tenemos la potencia fiscal
+# hay que contrastarla contra la potencia medida en KW
+# a partir de los KW se consiguen los CV
+
+# Con la potencia fiscal se podría calcular valor de impuestos
+
+# claves primarias para poder unir las tablas
+matric_power_tot <- data_set_def[, .N, by = POTENCIA]
+# setkey(matric_power_tot, CILINDRADA)
+setnames(matric_power_tot, 
+         names(matric_power_tot), c("potencia", "matric"))
+
+# Construccion de tramos
+str(matric_power_tot)
+matric_power_tot[, potencia:=as.numeric(as.character(potencia))]
+
+print(paste0("NA encontrados: ", matric_power_tot[is.na(potencia), matric]))
+# Eliminacion de NA
+matric_power_tot <- na.omit(matric_power_tot)
+
+hist(matric_power_tot$potencia)
+
+########################################################################################+
+# Potencia (KW) ----
+########################################################################################+
+
+# claves primarias para poder unir las tablas
+matric_powerKW_tot <- data_set_def[, .N, by = KW]
+setnames(matric_powerKW_tot, 
+         names(matric_powerKW_tot), c("kw", "matric"))
+
+# Construccion de tramos
+str(matric_powerKW_tot)
+matric_powerKW_tot[, kw:=as.numeric(as.character(kw))]
+matric_powerKW_tot[, cv:=kw*1.36]
+
+hist(matric_powerKW_tot$kw)
+hist(matric_powerKW_tot$cv)
+matric_powerKW_tot[,tramos := 
+    cut(matric_powerKW_tot$cv
+        , breaks = c(0, 60, 90, 115, 140, 170, 210, 300, 450, 10000))
+    ]
+
+# Eliminacion de NA
+matric_powerKW_tot <- na.omit(matric_powerKW_tot)
+
+# Agrupamos los tramos
+matric_powerKW_tot <- matric_powerKW_tot[, sum(matric), by = tramos]
+
+# Ordenamos
+matric_powerKW_tot <- matric_powerKW_tot[order(tramos, decreasing = F)]
+
+setnames(matric_powerKW_tot, 
+         names(matric_powerKW_tot), c("cv", "matric"))
