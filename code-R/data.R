@@ -11,10 +11,12 @@
 
 #### Parametros ####
 DirDat   <- file.path(DirPro, "data" )
+fichDat  <- "dat201412201509.rds" #fichDat  <- "dat201412201503.rds"
 fichAux  <- "tablas_aux.rds" 
 fichMod  <- "modelos.xlsx"
   HojMod <- "Estudio modelos veh"
-fichDat  <- "dat201412201503.rds"   #  "dat201501.rds" # 
+fechIni  <- as.Date('2014-12-01')
+fechEnd  <- as.Date('2015-09-30')
 
 col_sel <- c("FEC_MATRICULA", "DESCRIPCION_LARGA", "MODELO"
              , "COD_PROCEDENCIA", "COD_PROPULSION", "CILINDRADA"
@@ -22,13 +24,12 @@ col_sel <- c("FEC_MATRICULA", "DESCRIPCION_LARGA", "MODELO"
              , "SEXO", "KW", "NUM_PLAZAS", "CO2", "FABRICANTE"
              , "CATEGORIA_HOMOLOGACION_EUROPEA", "NIVEL_EMISIONES_EURO"
              , "CONSUMO", "CLASIFICACION_REGLAMENTO_VEHICULOS")
+colFech <- c("FEC_MATRICULA","FEC_TRAMITACION","FEC_TRAMITE","FEC_PRIM_MATRICULACION","FEC_DESCONOCIDA")
 
-
-#### Carga datos y filtros ####
+#### Carga datos ####
 
 # tablas auxiliares
 data_aux <- readRDS(file.path(DirDat, fichAux))
-
 
 # tabla de modelos
 data_modelos <- 
@@ -38,16 +39,24 @@ data_modelos <-
 
 # raw data
 data_all <- 
-    readRDS(file.path(DirDat, "dat201412201503.rds"))
+    readRDS(file.path(DirDat, fichDat))
 setDT(data_all)
 
-# data_all <- data_all[COD_CLASE_MAT==0]
+
+#### filtros
+
+# eliminacion de fechas anteriores a fechaIni y porsteriores a fechaEnd
+cat("Eliminacion de fechas anteriores a ",fechIni," y porsteriores a ", fechEnd,"\n")
+data_all <- data_all[FEC_MATRICULA >= fechIni  & FEC_MATRICULA <= fechEnd]
+
 
 # eliminacion de varios registros por vehi?culo
 data_all[,BASTIDOR := as.character(BASTIDOR)]
 
 bast_resto <- data_all[nchar(as.character(gsub("^\\s+|\\s+$", "",BASTIDOR)))!=17,]
 bast_17 <- data_all[nchar(as.character(gsub("^\\s+|\\s+$", "",BASTIDOR)))==17,]
+
+
 
 # nrow(bast_resto)+nrow(bast_17)
 
