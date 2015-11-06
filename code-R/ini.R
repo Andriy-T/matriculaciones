@@ -12,6 +12,8 @@ if (Sys.info()["user"] == "Alfonso") DirPro  <- "C:/Users/Alfonso/Dropbox/proyec
 
 CargaIniPro <- T # si CargaIniPro es TRUE cargamos las librerias, funciones y datos
                     # en otro caso solamente se cargan las librerias
+Fast  <- F  #Si Fast es TRUE se recupera la última carga de datos almacenada en disco. Si no se recargan los ficheros originales
+
 
 # cargar librerias
 cat ("Cargando librerias \n")
