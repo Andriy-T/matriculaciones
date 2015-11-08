@@ -24,7 +24,7 @@ matric_tot_dia <- matric_tot_dia[fecha >= fechIni &
                                      fecha <= fechEnd]
 
 ########################################################################################+
-# total matriculaciones por dia ----
+# total matriculaciones por mes ----
 ########################################################################################+
 
 tmp_df <- data_set_def[,.N, by = FEC_MATRICULA]
@@ -51,6 +51,27 @@ tmp_df3[, ':=' (mes = func.simpleCap(strftime(mes0, "%B"))
 
 # guardando resultados en una tabla
 matric_tot_mes <- tmp_df3
+
+########################################################################################+
+# top n marcas ultimo mes ----
+########################################################################################+
+
+n <- 5
+
+tmp_df <- data_set_def[as.Date(FEC_MATRICULA, format = "%d%m%Y")
+                       %in% seq.Date(matric_tot_mes[.N,mes0], fechEnd, 1)
+                       ,.N, by = DESCRIPCION_LARGA]
+
+# seleccion de los campos
+tmp_df2 <- tmp_df[order(N, decreasing = T)][1:n,]
+
+setnames(tmp_df2, names(tmp_df2), c("Marca", "Matriculaciones"))
+
+as.numeric(tmp_df2$Marca)
+
+tmp_df2[, Marca := factor(Marca, levels = Marca)]
+
+matric_topMarca <- tmp_df2
 
 ########################################################################################+
 # Propulsion ----

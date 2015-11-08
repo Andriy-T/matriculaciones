@@ -18,8 +18,8 @@ graf.ts_matric <- hPlot(matric ~ Date, data = tmp_df_2,
 graf.ts_matric$title(text = 'Evolución mensual')
 
 # Opciones del grafico
-graf.ts_matric$chart(zoomType = "x")
-graf.ts_matric$params$width ="60%"
+# graf.ts_matric$chart(zoomType = "x")
+graf.ts_matric$params$width ="100%"
 # graf.ts_matric$exporting(enabled=T)
 
 graf.ts_matric$plotOptions(
@@ -53,6 +53,58 @@ graf.ts_matric
 ########################################################+
 # Graficos descriptivos
 ########################################################+
+
+# ------------------------------------------------------+
+# top marcas en matric el último mes --------------
+# ------------------------------------------------------+
+
+graf.topMarca <- hPlot(Matriculaciones ~ Marca, data = matric_topMarca
+                     , type = "bar"
+)
+
+# Titulo
+graf.topMarca$title(text = 'Top marcas', align = "left")
+
+graf.topMarca$plotOptions(
+    bar = list(
+        colorByPoint = F
+        , dataLabels = list(
+            enabled = T
+        )
+        , pointPadding = 0
+        , groupPadding = 0.05
+        , dataLabels = list(
+            enabled = TRUE
+            , color = '#FFFFFF'
+            , x = -70 #10 pixels down from the top
+            , style = list(
+                fontSize = '14px'
+                , fontWeight = "bold"
+                , fontFamily = 'Verdana, sans-serif'
+            )
+        )
+        , showInLegend = TRUE
+    )
+)
+
+
+graf.topMarca$yAxis(
+    list(list(title = list(text = ''), min = 0
+              , gridLineWidth = 0, labels = list(enabled = F)
+    )
+    )
+)
+graf.topMarca$xAxis(
+    categories = matric_topMarca$Marca
+    , lineWidth = 0
+    , tickWidth = 0
+    , title = list(text = '')
+)
+
+graf.topMarca$params$width ="100%"
+graf.topMarca$params$height = 280
+
+graf.topMarca
 
 # ------------------------------------------------------+
 # Propulsion --------------

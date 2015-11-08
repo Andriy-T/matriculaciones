@@ -12,6 +12,8 @@ shinyServer(
                        , decimal.mark = ",")
                 , "Total matriculaciones", icon = icon("check-circle-o"),
                 color = "blue"
+                , width = 12
+                , href = "http://www.dgt.es/es/explora/en-cifras/matriculaciones.shtml"
             )
         })
         
@@ -85,6 +87,12 @@ shinyServer(
         output$graf.ts_matric <- renderChart2({
             
             graf.ts_matric
+            
+        }
+        )
+        output$graf.topMarca <- renderChart2({
+            
+            graf.topMarca
             
         }
         )

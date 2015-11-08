@@ -37,8 +37,16 @@ shinyUI(
 #                                         # , height =  150
 #                                         , width = 3)
                                   # , hr()
-                                  , valueBoxOutput("res_matric_mes", width = 3)
-                                    , showOutput('graf.ts_matric', 'highcharts')
+, fluidRow(
+    column(width = 4
+           , valueBoxOutput("res_matric_mes", width = 12)
+           # , h4("Top marcas")
+           , showOutput("graf.topMarca", "highcharts")
+           ),
+    column(width = 8
+           , showOutput('graf.ts_matric', 'highcharts')
+    )
+)
 
 #                                   , valueBoxOutput("res_clientes", width = 3)
 #                                   , valueBoxOutput("res_objetivo", width = 3)
