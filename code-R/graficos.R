@@ -3,8 +3,8 @@
 ########################################################+
 
 # transformamos la tabla para visualizar bien las fechas
-tmp_df_2 <- transform(matric_tot_dia
-                      , Date = as.numeric(as.POSIXct(fecha))*1000)
+tmp_df_2 <- transform(matric_tot_mes
+                      , Date = as.numeric(as.POSIXct(mes0))*1000)
 
 # -------------------------------------------------------+
 # Grafico -----
@@ -15,11 +15,11 @@ graf.ts_matric <- hPlot(matric ~ Date, data = tmp_df_2,
                type = "area"
 )
 # Titulo
-graf.ts_matric$title(text = 'Matricualciones diarias')
+graf.ts_matric$title(text = 'Evolución mensual')
 
 # Opciones del grafico
 graf.ts_matric$chart(zoomType = "x")
-graf.ts_matric$params$width ="100%"
+graf.ts_matric$params$width ="60%"
 # graf.ts_matric$exporting(enabled=T)
 
 graf.ts_matric$plotOptions(

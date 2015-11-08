@@ -20,8 +20,37 @@ matric_tot_dia <- matric_tot_dia[,.(fecha, N)][order(fecha)]
 setnames(matric_tot_dia, names(matric_tot_dia), c("fecha", "matric"))
 
 matric_tot_dia[, range(fecha)]
-matric_tot_dia <- matric_tot_dia[fecha >= '2014-12-01' &
-                                     fecha <= '2015-06-30']
+matric_tot_dia <- matric_tot_dia[fecha >= fechIni &
+                                     fecha <= fechEnd]
+
+########################################################################################+
+# total matriculaciones por dia ----
+########################################################################################+
+
+tmp_df <- data_set_def[,.N, by = FEC_MATRICULA]
+
+# reconocer formato de fecha
+tmp_df[, fecha := as.Date(FEC_MATRICULA, format = "%d%m%Y")]
+
+# Ordenacion cronologica
+tmp_df2 <- tmp_df[,.(fecha, N)][order(fecha)]
+
+# Agregacion mensual de datos
+# pendiente aviso: mes incompleto
+
+tmp_df2[, mes0 := fecha - as.numeric(strftime(fecha, format = "%d"))+1]
+
+# filtro fechas y agrupando por mes en formato fecha
+tmp_df3 <- tmp_df2[fecha >= fechIni & fecha <= fechEnd
+                   , .(matric = sum(N)), by = mes0]
+
+# columnas personalizadas para analisis
+tmp_df3[, ':=' (mes = func.simpleCap(strftime(mes0, "%B"))
+            , anio = strftime(mes0, "%Y")
+            , mes_anio = func.simpleCap(strftime(mes0, "%B'%y")))]
+
+# guardando resultados en una tabla
+matric_tot_mes <- tmp_df3
 
 ########################################################################################+
 # Propulsion ----
@@ -144,3 +173,11 @@ matric_powerKW_tot <- matric_powerKW_tot[order(tramos, decreasing = F)]
 
 setnames(matric_powerKW_tot, 
          names(matric_powerKW_tot), c("cv", "matric"))
+
+
+
+########################################################################################+
+# limpiar objetos temporales ----
+########################################################################################+
+
+rm(list = ls(pattern = "tmp_"))

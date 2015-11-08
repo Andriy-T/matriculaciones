@@ -39,6 +39,11 @@ func.ToName <- function (nom){
     ToNames <- apply(as.matrix(nom2), 1, ElimDup, dup = CTE_ToName_sep)
 }
 
+# primera letra mayuscula
+func.simpleCap <- function(x) {
+    gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2", x, perl=TRUE)
+}
+
 ##### Existen un objeto #####
 
 # ¡¡¡ Ya existe una funcion: base::exists()

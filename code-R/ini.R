@@ -14,14 +14,14 @@ CargaIniPro <- T # si CargaIniPro es TRUE cargamos las librerias, funciones y da
                     # en otro caso solamente se cargan las librerias
 
 # cargar librerias
-print ("Cargando librerias")
+cat ("Cargando librerias \n")
 source(file.path(DirCode, "librerias.R"))
 # cargar funciones
-print ("Cargando funciones")
+cat ("Cargando funciones \n")
 if(CargaIniPro) source(file.path(DirCode, "funciones.R"))
 # cargar data
-print ("Cargando data")
+cat ("Cargando data \n")
 if(CargaIniPro) source(file.path(DirCode, "data.R"))
 # cargar data
-print ("Cargando tablas")
+cat ("Cargando tablas \n")
 if(CargaIniPro) source(file.path(DirCode, "tablas.R"))
