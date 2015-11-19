@@ -19,7 +19,7 @@ CTE_ToName  <- list(
   c("á","a"),c("é","e"),c("í","i"),c("ó","o"),c("ú","u")
   ,c("Á","A"),c("É","E"),c("Í","I"),c("Ó","O"),c("Ú","U")
   ,c(" ",CTE_ToName_sep),c("/",CTE_ToName_sep),c("-",CTE_ToName_sep),c("*",CTE_ToName_sep),c("+",CTE_ToName_sep)
-  ,c("[",CTE_ToName_sep),c("]",CTE_ToName_sep),c("(",CTE_ToName_sep),c(")",CTE_ToName_sep)
+  ,c("[",CTE_ToName_sep),c("]",CTE_ToName_sep),c("(",CTE_ToName_sep),c(")",CTE_ToName_sep),c(",",CTE_ToName_sep)
 )
 
 func.mygsub <- function(x, txt){
@@ -34,9 +34,9 @@ func.ElimDup <- function(txt, dup){
 }
 
 #efectua las subsituciones marcadas por 'CTE_ToName'
-func.ToName <- function (nom){
-    nom2 <- Reduce(func.mygsub,CTE_ToName,init = nom)
-    ToNames <- apply(as.matrix(nom2), 1, func.ElimDup, dup = CTE_ToName_sep)
+func.ToName <- function (nom, tabNom = CTE_ToName, dup = CTE_ToName_sep){
+    nom2 <- Reduce(func.mygsub,tabNom,init = nom)
+    if (dup != "") ToNames <- apply(as.matrix(nom2), 1, func.ElimDup, dup = dup) else nom2
 }
 
 # primera letra mayuscula

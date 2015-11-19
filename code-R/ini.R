@@ -14,6 +14,15 @@ CargaIniPro <- T # si CargaIniPro es TRUE cargamos las librerias, funciones y da
                     # en otro caso solamente se cargan las librerias
 Fast  <- F  #Si Fast es TRUE se recupera la última carga de datos almacenada en disco. Si no se recargan los ficheros originales
 
+#### Parametros  de carga ####
+DirDat   <- file.path(DirPro, "data" )
+fichDatRaw  <- "dat201412201509.rds" #fichDat  <- "dat201412201503.rds"
+fichDatTur  <- "datTur201412201509.rds" #fichDat  <- "dat201412201503.rds"
+fichAux  <- "tablas_aux.rds" 
+fichMod  <- "modelos.xlsx"
+HojMod <- "Estudio modelos veh"
+fechIni  <- as.Date('2014-12-01')
+fechEnd  <- as.Date('2015-09-30')
 
 # cargar librerias
 cat ("Cargando librerias \n")
@@ -22,8 +31,29 @@ source(file.path(DirCode, "librerias.R"))
 cat ("Cargando funciones \n")
 if(CargaIniPro) source(file.path(DirCode, "funciones.R"))
 # cargar data
+
 cat ("Cargando data \n")
-if(CargaIniPro) source(file.path(DirCode, "data.R"))
-# cargar data
+# if(CargaIniPro) source(file.path(DirCode, "data.R"))
+
+#### Carga datos ####
+# tablas auxiliares
+data_aux <- readRDS(file.path(DirDat, fichAux))
+
+# tabla de modelos
+data_modelos <- 
+  read.xlsx(file.path(DirDat, HojMod, fichMod)
+            , sheetIndex = 3, startRow = 1, endRow = 154, colIndex = 1:3
+            , header = T, stringsAsFactors = F)
+
+if (Fast){
+  # Data Turismos (procesado)
+  data_set_def <- 
+    readRDS(file.path(DirDat, fichDatTur))
+  setDT(data_set_def) 
+} else{ source(file.path(DirCode, "data_slow.R")) }
+
+
+# cargar tablas
 cat ("Cargando tablas \n")
 if(CargaIniPro) source(file.path(DirCode, "tablas.R"))
+
