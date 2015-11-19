@@ -5,7 +5,7 @@
 
 # print(object.size(df), units = "MB")
 # str(df)
-# df[, DESCRIPCION_LARGA:=as.character(DESCRIPCION_LARGA)]
+# df[, MARCA_ITV:=as.character(MARCA_ITV)]
 
 ########################################################################################+
 # total matriculaciones por dia ----
@@ -60,7 +60,7 @@ n <- 5
 
 tmp_df <- data_set_def[as.Date(FEC_MATRICULA, format = "%d%m%Y")
                        %in% seq.Date(matric_tot_mes[.N,mes0], fechEnd, 1)
-                       ,.N, by = DESCRIPCION_LARGA]
+                       ,.N, by = MARCA_ITV]
 
 # seleccion de los campos
 tmp_df2 <- tmp_df[order(N, decreasing = T)][1:n,]
@@ -78,13 +78,13 @@ matric_topMarca <- tmp_df2
 ########################################################################################+
 
 # claves primarias para poder unir las tablas
-matric_prop_tot <- data_set_def[, .N, by = COD_PROPULSION]
-setkey(matric_prop_tot, COD_PROPULSION)
+matric_prop_tot <- data_set_def[, .N, by = COD_PROPULSION_ITV]
+setkey(matric_prop_tot, COD_PROPULSION_ITV)
 
 # claves primarias para poder unir las tablas
-tmp_aux <- data_aux$COD_PROPULSION
+tmp_aux <- data_aux$COD_PROPULSION_ITV
 setDT(tmp_aux)
-setkey(tmp_aux, COD_PROPULSION)
+setkey(tmp_aux, COD_PROPULSION_ITV)
 
 # agrupación por falta de volúmen
 # Buscar agrupaciones
@@ -110,8 +110,8 @@ matric_prop_tot <- matric_prop_tot[order(matric, decreasing = T)]
 ########################################################################################+
 
 # claves primarias para poder unir las tablas
-matric_cilin_tot <- data_set_def[, .N, by = CILINDRADA]
-# setkey(matric_cilin_tot, CILINDRADA)
+matric_cilin_tot <- data_set_def[, .N, by = CILINDRADA_ITV]
+# setkey(matric_cilin_tot, CILINDRADA_ITV)
 setnames(matric_cilin_tot, 
          names(matric_cilin_tot), c("cilin", "matric"))
 
@@ -141,14 +141,14 @@ setnames(matric_cilin_tot,
 ########################################################################################+
 
 # por  lo visto tenemos la potencia fiscal
-# hay que contrastarla contra la potencia medida en KW
-# a partir de los KW se consiguen los CV
+# hay que contrastarla contra la potencia medida en KW_ITV
+# a partir de los KW_ITV se consiguen los CV
 
 # Con la potencia fiscal se podr�a calcular valor de impuestos
 
 # claves primarias para poder unir las tablas
-matric_power_tot <- data_set_def[, .N, by = POTENCIA]
-# setkey(matric_power_tot, CILINDRADA)
+matric_power_tot <- data_set_def[, .N, by = POTENCIA_ITV]
+# setkey(matric_power_tot, CILINDRADA_ITV)
 setnames(matric_power_tot, 
          names(matric_power_tot), c("potencia", "matric"))
 
@@ -163,37 +163,37 @@ matric_power_tot <- na.omit(matric_power_tot)
 hist(matric_power_tot$potencia)
 
 ########################################################################################+
-# Potencia (KW) ----
+# Potencia (KW_ITV) ----
 ########################################################################################+
 
 # claves primarias para poder unir las tablas
-matric_powerKW_tot <- data_set_def[, .N, by = KW]
-setnames(matric_powerKW_tot, 
-         names(matric_powerKW_tot), c("kw", "matric"))
+matric_powerKW_ITV_tot <- data_set_def[, .N, by = KW_ITV]
+setnames(matric_powerKW_ITV_tot, 
+         names(matric_powerKW_ITV_tot), c("kw", "matric"))
 
 # Construccion de tramos
-str(matric_powerKW_tot)
-matric_powerKW_tot[, kw:=as.numeric(as.character(kw))]
-matric_powerKW_tot[, cv:=kw*1.36]
+str(matric_powerKW_ITV_tot)
+matric_powerKW_ITV_tot[, kw:=as.numeric(as.character(kw))]
+matric_powerKW_ITV_tot[, cv:=kw*1.36]
 
-hist(matric_powerKW_tot$kw)
-hist(matric_powerKW_tot$cv)
-matric_powerKW_tot[,tramos := 
-    cut(matric_powerKW_tot$cv
+hist(matric_powerKW_ITV_tot$kw)
+hist(matric_powerKW_ITV_tot$cv)
+matric_powerKW_ITV_tot[,tramos := 
+    cut(matric_powerKW_ITV_tot$cv
         , breaks = c(0, 60, 90, 115, 140, 170, 210, 300, 450, 10000))
     ]
 
 # Eliminacion de NA
-matric_powerKW_tot <- na.omit(matric_powerKW_tot)
+matric_powerKW_ITV_tot <- na.omit(matric_powerKW_ITV_tot)
 
 # Agrupamos los tramos
-matric_powerKW_tot <- matric_powerKW_tot[, sum(matric), by = tramos]
+matric_powerKW_ITV_tot <- matric_powerKW_ITV_tot[, sum(matric), by = tramos]
 
 # Ordenamos
-matric_powerKW_tot <- matric_powerKW_tot[order(tramos, decreasing = F)]
+matric_powerKW_ITV_tot <- matric_powerKW_ITV_tot[order(tramos, decreasing = F)]
 
-setnames(matric_powerKW_tot, 
-         names(matric_powerKW_tot), c("cv", "matric"))
+setnames(matric_powerKW_ITV_tot, 
+         names(matric_powerKW_ITV_tot), c("cv", "matric"))
 
 
 

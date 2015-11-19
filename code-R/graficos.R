@@ -224,11 +224,11 @@ graf.dsc.cilin
 # Potencia en cv (ejemplo de bar chart) --------------
 # ------------------------------------------------------+
 
-matric_powerKW_tot
+matric_powerKW_ITV_tot
 
-tmp_ylim <- matric_powerKW_tot[,max(matric)*1.25]
+tmp_ylim <- matric_powerKW_ITV_tot[,max(matric)*1.25]
 
-graf.dsc.cv <- hPlot(matric ~ cv, data = matric_powerKW_tot
+graf.dsc.cv <- hPlot(matric ~ cv, data = matric_powerKW_ITV_tot
                        , type = "column"
                        # , options = list(innerSize = "20%")
                        )
