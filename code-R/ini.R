@@ -1,7 +1,7 @@
 ##################################################################
 # fichero a ejecutar al iniciarla sesion
 ##################################################################
-
+ 
 if (Sys.info()["user"] == "Alfonso") DirCode <- "C:/Alfonso/cosas/software/R/matriculaciones/code-R" else
   DirCode <- "C:/Users/Andrey/Documents/GitHub/matriculaciones/code-R" 
 
