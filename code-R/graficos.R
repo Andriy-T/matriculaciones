@@ -20,6 +20,7 @@ graf.ts_matric$title(text = 'Evolución mensual')
 # Opciones del grafico
 # graf.ts_matric$chart(zoomType = "x")
 graf.ts_matric$params$width ="100%"
+graf.ts_matric$params$height = 280
 # graf.ts_matric$exporting(enabled=T)
 
 graf.ts_matric$plotOptions(

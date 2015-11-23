@@ -61,6 +61,12 @@ n <- 5
 tmp_df <- data_set_def[as.Date(FEC_MATRICULA, format = "%d%m%Y")
                        %in% seq.Date(matric_tot_mes[.N,mes0], fechEnd, 1)
                        ,.N, by = DESCRIPCION_LARGA]
+# tmp_df <- data_set_def[,.N, by = DESCRIPCION_LARGA]
+
+# Guardar tabla todas marcas
+matric_Marca <- tmp_df[order(N, decreasing = T)]
+setnames(matric_Marca, names(matric_Marca)
+         , c("Marca", "Matriculaciones"))
 
 # seleccion de los campos
 tmp_df2 <- tmp_df[order(N, decreasing = T)][1:n,]
@@ -86,7 +92,7 @@ tmp_aux <- data_aux$COD_PROPULSION
 setDT(tmp_aux)
 setkey(tmp_aux, COD_PROPULSION)
 
-# agrupación por falta de volúmen
+# agrupaciÃ³n por falta de volÃºmen
 # Buscar agrupaciones
 tmp_aux[, agrup:=c("Gasolina", "Diesel", "Eléctrico", "Resto"
                       , "Gas", "Resto", "Gas", "Gas"
@@ -94,7 +100,7 @@ tmp_aux[, agrup:=c("Gasolina", "Diesel", "Eléctrico", "Resto"
                       )]
 
 # union
-matric_prop_tot <- tmp_aux[matric_prop_tot][, .(DESCRIPCION, N)]
+matric_prop_tot <- tmp_aux[matric_prop_tot][, sum(N), by = agrup]
 
 # Cambio de nombres a las columnas
 setnames(matric_prop_tot, names(matric_prop_tot), c("prop", "matric"))
@@ -144,7 +150,7 @@ setnames(matric_cilin_tot,
 # hay que contrastarla contra la potencia medida en KW
 # a partir de los KW se consiguen los CV
 
-# Con la potencia fiscal se podr�a calcular valor de impuestos
+# Con la potencia fiscal se podría calcular valor de impuestos
 
 # claves primarias para poder unir las tablas
 matric_power_tot <- data_set_def[, .N, by = POTENCIA]

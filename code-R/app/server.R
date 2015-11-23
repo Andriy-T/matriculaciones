@@ -4,7 +4,7 @@ require(shinydashboard)
 shinyServer(
     function(input, output) {
         
-        # Hoja resumen
+        # Hoja resumen ------------------------------------------------------
         
         output$res_matric_mes <- renderValueBox({
             valueBox(
@@ -16,6 +16,30 @@ shinyServer(
                 , href = "http://www.dgt.es/es/explora/en-cifras/matriculaciones.shtml"
             )
         })
+        output$resumen_text_1 <- renderText({
+            paste0("El volúmen de matriculaciones en el período ha sido"
+                   , " de ", format(matric_tot_mes[.N, matric], big.mark = "."
+                                    , decimal.mark = ","))
+        })
+        output$resumen_text_2 <- renderText({
+            paste0("Más texto... Pendiente de introducir texto con tags")
+        })
+        output$resumen_text_3 <- renderText({
+            paste0("Sustituir top marcas por totales del período por segmento")
+        })
+        
+        # Hoja indicadores ------------------------------------------------------
+        
+        output$ind_btn_tot <- renderUI({
+            actionButton("ind_btn_tot", "Total")
+        })
+        
+        output$ind_sel_marca <- renderUI({
+            selectInput("ind_sel_marca", label = "", 
+                        choices = as.character(matric_Marca$Marca))
+        })
+        
+        # ---------------------
         
         output$selector_fechas <- renderUI({
             selectInput(inputId = "selector_fechas", label = "Período"
