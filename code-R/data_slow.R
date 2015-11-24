@@ -5,8 +5,12 @@
 ###  NO carga los datos auxiliares
 ###################################################################################+
 
+# lee raw data
+# filtros
+# Parametros
 
-# los parametros se especifican en ini.r
+#### Parametros
+# los parametros  de carga se especifican en ini.r
 # DirDat   <- file.path(DirPro, "data" )
 # fichDat  <- "dat201412201509.rds" #fichDat  <- "dat201412201503.rds"
 # fichAux  <- "tablas_aux.rds" 
@@ -16,9 +20,9 @@
 # fechEnd  <- as.Date('2015-09-30')
 # 
 col_sel <- c("FEC_MATRICULA", "MARCA_ITV", "MODELO_ITV"
-             , "COD_PROCEDENCIA_ITV", "COD_PROPULSION_ITV", "CILINDRADA_ITV"
+             , "COD_PROCEDENCIA_ITV", "COD_TIPO", "COD_PROPULSION_ITV", "CILINDRADA_ITV"
              , "POTENCIA_ITV", "COD_PROVINCIA_MAT", "CODIGO_POSTAL"
-             , "PERSONA_FISICA_JURIDIC", "KW_ITV", "NUM_PLAZAS", "CO2_ITV", "FABRICANTE"
+             , "PERSONA_FISICA_JURIDIC", "KW_ITV", "NUM_PLAZAS", "CO2_ITV", "FABRICANTE_ITV"
              , "CATEGORIA_HOMOLOGACION_EUROPEA_ITV", "NIVEL_EMISIONES_EURO_ITV"
              , "CONSUMO.WH.KM_ITV", "CLASIFICACION_REGLAMENTO_VEHICULOS_ITV"
              , "modelo1"
@@ -26,26 +30,63 @@ col_sel <- c("FEC_MATRICULA", "MARCA_ITV", "MODELO_ITV"
 colFech <- c("FEC_MATRICULA","FEC_TRAMITACION","FEC_TRAMITE","FEC_PRIM_MATRICULACION","FEC_PROCESO")
 
 
-# raw data
+#### lee raw data
 data_all <- 
     readRDS(file.path(DirDat, fichDatRaw))
 setDT(data_all)
 
 
 #### filtros
+numReg0 <- nrow(data_all)
 
-# eliminacion de fechas anteriores a fechaIni y porsteriores a fechaEnd
-numReg <- length(data_all[[1]])
+# 1 COD_CLASE_MAT=0 , matriculas ordinarias, quitamos turisticas, veh espaciales ciclomotores...
+numReg <- nrow(data_all)
+data_all <- data_all[COD_CLASE_MAT==0]
+if (numReg != nrow(data_all) ){
+  warning(cat("Eliminados", numReg - nrow(data_all) , "registros ("
+              ,100*round((numReg - nrow(data_all)) /numReg,4)
+              ,"%) debido a matriculas no ordinarias\n"))        
+}
+
+# 2 CLAVE_TRAMITE	IN (1,9) matriculaciones nuevas
+numReg <- nrow(data_all)
+data_all <- data_all[CLAVE_TRAMITE==1 |CLAVE_TRAMITE ==9]
+if (numReg != nrow(data_all) ){
+  warning(cat("Eliminados", numReg - nrow(data_all) , "registros ("
+              ,100*round((numReg - nrow(data_all)) /numReg,4)
+              ,"%) debido a tramite no matriculacion nueva\n"))        
+}
+
+# 3 COD_TIPO in (40,25) Turismos y todoterrenos
+numReg <- nrow(data_all)
+data_all <- data_all[COD_TIPO == "40" | COD_TIPO == "25"]
+if (numReg != nrow(data_all) ){
+  warning(cat("Eliminados", numReg - nrow(data_all) , "registros ("
+              ,100*round((numReg - nrow(data_all)) /numReg,4)
+              ,"%) debido a tramite no matriculacion nueva\n"))        
+}
+
+# 4 IND_NUEVO_USADO == "N" Solo vehiculos nuevos
+numReg <- nrow(data_all)
+data_all <- data_all[IND_NUEVO_USADO == "N"]
+if (numReg != nrow(data_all) ){
+  warning(cat("Eliminados", numReg - nrow(data_all) , "registros ("
+              ,100*round((numReg - nrow(data_all)) /numReg,4)
+              ,"%) debido a tramite no matriculacion nueva\n"))        
+}
+
+# 5 FEC_MATRICULA >= fechIni  & FEC_MATRICULA <= fechEnd Eliminacion de fechas anteriores a fechaIni y porsteriores a fechaEnd
+numReg <- nrow(data_all)
 data_all <- data_all[FEC_MATRICULA >= fechIni  & FEC_MATRICULA <= fechEnd]
-if (numReg != length(data_all[[1]]) ){
-  warning(cat("Eliminados", numReg - length(data_all[[1]]) , "registros ("
-              ,100*round((numReg - length(data_all[[1]])) /numReg,4)
+if (numReg != nrow(data_all) ){
+  warning(cat("Eliminados", numReg - nrow(data_all) , "registros ("
+              ,100*round((numReg - nrow(data_all)) /numReg,4)
               ,"%) debido a fechas anteriores a ",as.character(fechIni)
               ," y porsteriores a ", as.character(fechEnd),"\n"))        
 }
 
-# eliminacion de bastidores que no tengan 17 caracteres
-numReg <- length(data_all[[1]])
+#6  eliminacion de bastidores que no tengan 17 caracteres
+numReg <- nrow(data_all)
 data_all[,BASTIDOR_ITV := as.character(BASTIDOR_ITV)]
 bast_17 <- data_all[nchar(as.character(gsub("^\\s+|\\s+$", "",BASTIDOR_ITV)))==17,]
 if (length(bast_17[[1]] ) != numReg ){ 
@@ -53,6 +94,7 @@ if (length(bast_17[[1]] ) != numReg ){
               ,100*round((numReg - length(bast_17[[1]]))/ numReg,4)
               ,"%) con num bastidor != 17 caracteres\n" ))
 }
+nrow(bast_17)
 
 # eliminacion de bastidores repetidos
 ############################################################################################
@@ -71,6 +113,7 @@ if (length(data_set[[1]]) != numReg ){
               ,"%) debido a bastidores repetidos\n" ))
 }
 
+
 # nos quedamos con data_set que son los valores unicos por veh�???culo
 rm(bast_17,data_all)
 gc()
@@ -78,11 +121,6 @@ gc()
 # trabajamos con 2 data_set:
 # 1 para gráficos-descriptivos generales (turismos principalmente)
 # 2 para evoluciones por marca (aqui seleccionamos las principales)
-
-# filtramos solo turismos y todo terreno para la primera aproximación
-# data_set[,.N, by= COD_TIPO][order(N, decreasing = T)]
-data_set <- data_set[COD_TIPO == "40" | COD_TIPO == "25"]
-
 
 
 # Unificamos en los modelos de vehciculos
