@@ -15,7 +15,8 @@ shinyUI(
                           htmlOutput("selector_fechas"),
                           menuItem("Portada", tabName = "portada"),
                           menuItem("Resumen", tabName = "resumen", icon = icon("dashboard")),
-                          menuItem("Dashboard", tabName = "dashboard", icon = icon("area-chart")),
+                          menuItem("Indicadores", tabName = "indicadores"
+                                   , icon = icon("area-chart")),
                           menuItem("Tablas", tabName = "tablas", icon = icon("database"))
                       )
                   ),
@@ -27,47 +28,51 @@ shinyUI(
                                   h2("Esta es la página de bienvenida")
                           ),
                           tabItem(tabName = "resumen"
-                                  , h3("Evolución de las matriculaciones en España")
-                                                  , hr()
-#                                   , box(title = NULL
-#                                         # , column(htmlOutput("selector_fechas"), width = 4)
-#                                         , htmlOutput("selector_area")
-#                                         , htmlOutput("selector_tienda")
-#                                         , collapsible=TRUE
-#                                         # , height =  150
-#                                         , width = 3)
+                                  , h3("Evolución mensual de las matriculaciones en España")
+                                  , hr()
+                                  #                                   , box(title = NULL
+                                  #                                         # , column(htmlOutput("selector_fechas"), width = 4)
+                                  #                                         , htmlOutput("selector_area")
+                                  #                                         , htmlOutput("selector_tienda")
+                                  #                                         , collapsible=TRUE
+                                  #                                         # , height =  150
+                                  #                                         , width = 3)
                                   # , hr()
-, fluidRow(
-    column(width = 4
-           , valueBoxOutput("res_matric_mes", width = 12)
-           # , h4("Top marcas")
-           , showOutput("graf.topMarca", "highcharts")
-           ),
-    column(width = 8
-           , showOutput('graf.ts_matric', 'highcharts')
-    )
-)
-
-#                                   , valueBoxOutput("res_clientes", width = 3)
-#                                   , valueBoxOutput("res_objetivo", width = 3)
+                                  , textOutput("resumen_text_1")
+                                  , textOutput("resumen_text_2")
+                                  , textOutput("resumen_text_3")
+                                  , hr()
+                                  , fluidRow(
+                                      column(width = 4
+                                             # , valueBoxOutput("res_matric_mes", width = 12)
+                                             # , h4("Top marcas")
+                                             , showOutput("graf.topMarca", "highcharts")
+                                      ),
+                                      column(width = 8
+                                             , showOutput('graf.ts_matric', 'highcharts')
+                                      )
+                                  )
+                                  
+                                  #                                   , valueBoxOutput("res_clientes", width = 3)
+                                  #                                   , valueBoxOutput("res_objetivo", width = 3)
                                   # , infoBoxOutput("res_visitas", width = 6)
                           ),
-                          # Pestaña dashboard
-                          tabItem(tabName = "dashboard"
-                                  , h3("Evolución temporal")
-                                  , fluidPage(
-                                      column(3, htmlOutput("selector_kpi_1"))
-                                      , column(3, htmlOutput("selector_kpi_2"))
+                          # Pestaña indicadires
+                          tabItem(tabName = "indicadores"
+                                  , h3("Especificaciones de vehículos")
+                                  , fluidRow(
+                                      box(showOutput("graf.dsc.prop", "highcharts")
+                                          , width = 6, height = 360),
+                                      box(
+                                          # "Selecciona el indicador", 
+                                          br(),
+                                          # sliderInput("slider", "Slider input:", 1, 100, 50),
+                                          radioButtons("ind_rad_btn", "Selecciona el indicador"
+                                                       , c("Cilindrada", "Potencia"),
+                                                       inline = T)
+                                          , showOutput("graf.ind_rad", "highcharts")
+                                          , width = 6, height = 360)
                                   )
-                                  , showOutput('my.hChart', 'highcharts')
-                                  
-                                  #                 , fluidRow(
-                                  #                   box(title = "Histogram", 
-                                  #                       showOutput('my.hChart', 'highcharts')
-                                  #                       , collapsible=F,
-                                  #                       background = "green", footer = "Notas",
-                                  #                       width = 12)
-                                  #                 )
                           ),
                           
                           tabItem(tabName = "tablas"

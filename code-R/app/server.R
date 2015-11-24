@@ -4,7 +4,7 @@ require(shinydashboard)
 shinyServer(
     function(input, output) {
         
-        # Hoja resumen
+        # Hoja resumen ------------------------------------------------------
         
         output$res_matric_mes <- renderValueBox({
             valueBox(
@@ -16,20 +16,62 @@ shinyServer(
                 , href = "http://www.dgt.es/es/explora/en-cifras/matriculaciones.shtml"
             )
         })
+        output$resumen_text_1 <- renderText({
+            paste0("El volúmen de matriculaciones en el período ha sido"
+                   , " de ", format(matric_tot_mes[.N, matric], big.mark = "."
+                                    , decimal.mark = ","))
+        })
+        output$resumen_text_2 <- renderText({
+            paste0("Más texto... Pendiente de introducir texto con tags")
+        })
+        output$resumen_text_3 <- renderText({
+            paste0("Sustituir top marcas por totales del período por segmento")
+        })
+        
+        # Hoja indicadores ------------------------------------------------------
+        
+#         output$ind_btn_tot <- renderUI({
+#             actionButton("ind_btn_tot", "Total")
+#         })
+#         
+#         output$ind_sel_marca <- renderUI({
+#             selectInput("ind_sel_marca", label = "", 
+#                         choices = as.character(matric_Marca$Marca))
+#         })
+        
+        output$graf.dsc.prop <- renderChart2({
+            
+            graf.dsc.prop
+            
+        }
+        )        
+        output$graf.ind_rad <- renderChart2({
+            
+            out <- switch(input$ind_rad_btn,
+                   Cilindrada = graf.dsc.cilin,
+                   Potencia = graf.dsc.cv
+            )
+            return(out)
+            
+        }
+        )        
+        
+        
+        # ---------------------
         
         output$selector_fechas <- renderUI({
             selectInput(inputId = "selector_fechas", label = "Período"
                         , choices = matric_tot_mes[anio==2015, mes]
                         , selected = matric_tot_mes[.N, mes]
-                        )
+            )
         })
-#         output$selector_fechas <- renderUI({
-#             dateRangeInput(inputId = "selector_fechas", label = "Período"
-#                            , start = fechEnd-30
-#                            , end = fechEnd, min = fechIni, max = fechEnd
-#                            , format = "dd/mm/yyyy", startview = "month"
-#                            , weekstart = 0, language = "es", separator = " - ")
-#         })
+        #         output$selector_fechas <- renderUI({
+        #             dateRangeInput(inputId = "selector_fechas", label = "Período"
+        #                            , start = fechEnd-30
+        #                            , end = fechEnd, min = fechIni, max = fechEnd
+        #                            , format = "dd/mm/yyyy", startview = "month"
+        #                            , weekstart = 0, language = "es", separator = " - ")
+        #         })
         output$selector_area <- renderUI({
             selectInput("selector_area", label = "Seleccionar área", 
                         choices = list("Madrid" = 1, "Cataluña" = 2, "Andalucía" = 3), 

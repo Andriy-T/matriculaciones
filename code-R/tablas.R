@@ -82,19 +82,19 @@ matric_prop_tot <- data_set_def[, .N, by = COD_PROPULSION_ITV]
 setkey(matric_prop_tot, COD_PROPULSION_ITV)
 
 # claves primarias para poder unir las tablas
-tmp_aux <- data_aux$COD_PROPULSION_ITV
+tmp_aux <- data_aux$COD_PROPULSION
 setDT(tmp_aux)
-setkey(tmp_aux, COD_PROPULSION_ITV)
+setkey(tmp_aux, COD_PROPULSION)
 
 # agrupación por falta de volúmen
 # Buscar agrupaciones
 tmp_aux[, agrup:=c("Gasolina", "Diesel", "Eléctrico", "Resto"
-                      , "Gas", "Resto", "Gas", "Gas"
-                      , "Gas", "Resto", "Resto", "Resto", "Resto"
-                      )]
+                   , "Gas", "Resto", "Gas", "Gas"
+                   , "Gas", "Resto", "Resto", "Resto", "Resto"
+)]
 
 # union
-matric_prop_tot <- tmp_aux[matric_prop_tot][, .(DESCRIPCION, N)]
+matric_prop_tot <- tmp_aux[matric_prop_tot][, sum(N), by = agrup]
 
 # Cambio de nombres a las columnas
 setnames(matric_prop_tot, names(matric_prop_tot), c("prop", "matric"))
@@ -116,7 +116,7 @@ setnames(matric_cilin_tot,
          names(matric_cilin_tot), c("cilin", "matric"))
 
 # Construccion de tramos
-str(matric_cilin_tot)
+# str(matric_cilin_tot)
 matric_cilin_tot[, cilin:=as.integer(as.character(cilin))]
 
 hist(matric_cilin_tot$cilin)
@@ -144,7 +144,7 @@ setnames(matric_cilin_tot,
 # hay que contrastarla contra la potencia medida en KW_ITV
 # a partir de los KW_ITV se consiguen los CV
 
-# Con la potencia fiscal se podr�a calcular valor de impuestos
+# Con la potencia fiscal se podr?a calcular valor de impuestos
 
 # claves primarias para poder unir las tablas
 matric_power_tot <- data_set_def[, .N, by = POTENCIA_ITV]
@@ -153,14 +153,14 @@ setnames(matric_power_tot,
          names(matric_power_tot), c("potencia", "matric"))
 
 # Construccion de tramos
-str(matric_power_tot)
+# str(matric_power_tot)
 matric_power_tot[, potencia:=as.numeric(as.character(potencia))]
 
 print(paste0("NA encontrados: ", matric_power_tot[is.na(potencia), matric]))
 # Eliminacion de NA
 matric_power_tot <- na.omit(matric_power_tot)
 
-hist(matric_power_tot$potencia)
+# hist(matric_power_tot$potencia)
 
 ########################################################################################+
 # Potencia (KW_ITV) ----
@@ -172,7 +172,7 @@ setnames(matric_powerKW_ITV_tot,
          names(matric_powerKW_ITV_tot), c("kw", "matric"))
 
 # Construccion de tramos
-str(matric_powerKW_ITV_tot)
+# str(matric_powerKW_ITV_tot)
 matric_powerKW_ITV_tot[, kw:=as.numeric(as.character(kw))]
 matric_powerKW_ITV_tot[, cv:=kw*1.36]
 

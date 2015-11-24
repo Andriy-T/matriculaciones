@@ -20,6 +20,7 @@ graf.ts_matric$title(text = 'Evolución mensual')
 # Opciones del grafico
 # graf.ts_matric$chart(zoomType = "x")
 graf.ts_matric$params$width ="100%"
+graf.ts_matric$params$height = 280
 # graf.ts_matric$exporting(enabled=T)
 
 graf.ts_matric$plotOptions(
@@ -46,7 +47,7 @@ graf.ts_matric$yAxis(
 )
 
 # devolver codigo html del objeto
-graf.ts_matric$show("inline", include_assets = FALSE)
+# graf.ts_matric$show("inline", include_assets = FALSE)
 
 graf.ts_matric
 
@@ -160,6 +161,8 @@ graf.dsc.prop$tooltip(
 )
 
 graf.dsc.prop$legend(enabled = T)
+graf.dsc.prop$params$width ="100%"
+graf.dsc.prop$params$heigth = 360
 
 graf.dsc.prop
 
@@ -217,6 +220,9 @@ graf.dsc.cilin$yAxis(
     )
 )
 
+graf.dsc.cilin$params$width ="100%"
+graf.dsc.cilin$params$height = 240
+
 graf.dsc.cilin
 
 
@@ -273,6 +279,9 @@ graf.dsc.cv$yAxis(
     )
     )
 )
+
+graf.dsc.cv$params$width ="100%"
+graf.dsc.cv$params$heigth = 240
 
 graf.dsc.cv
 
