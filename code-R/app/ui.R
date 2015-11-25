@@ -13,20 +13,22 @@ shinyUI(
                   dashboardSidebar(
                       sidebarMenu(
                           htmlOutput("selector_fechas"),
-                          menuItem("Portada", tabName = "portada"),
+                          # menuItem("Portada", tabName = "portada"),
                           menuItem("Resumen", tabName = "resumen", icon = icon("dashboard")),
                           menuItem("Indicadores", tabName = "indicadores"
                                    , icon = icon("area-chart")),
+                          menuItem("Mapa", tabName = "mapa"
+                                   , icon = icon("map-marker")),
                           menuItem("Tablas", tabName = "tablas", icon = icon("database"))
                       )
                   ),
                   
                   dashboardBody(
                       tabItems(
-                          # Pestaña portada
-                          tabItem(tabName = "portada",
-                                  h2("Esta es la página de bienvenida")
-                          ),
+#                           # Pestaña portada
+#                           tabItem(tabName = "portada",
+#                                   h2("Esta es la página de bienvenida")
+#                           ),
                           tabItem(tabName = "resumen"
                                   , h3("Evolución mensual de las matriculaciones en España")
                                   , hr()
@@ -74,6 +76,20 @@ shinyUI(
                                           , width = 6, height = 360)
                                   )
                           ),
+                          tabItem(tabName = "mapa"
+                                  , h3("Matriculaciones por comunidad autónoma")
+                                  , fluidRow(
+                                      box(leafletOutput("map"
+                                                        , width = "100%"
+                                                        , height = 500
+                                                        )
+                                          , width = 8, height = 520
+                                      ),  
+                                      box(
+                                          dataTableOutput("tabla_mapa")
+                                          , width = 4, height = 520
+                                  )
+                          )),
                           
                           tabItem(tabName = "tablas"
                                   , htmlOutput("selector_tabla")

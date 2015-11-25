@@ -57,6 +57,44 @@ shinyServer(
         )        
         
         
+        # Hoja Mapa
+        
+#         points <- eventReactive(input$recalc, {
+#             print(cbind(rnorm(40) * 2 + 13, rnorm(40) + 48))
+#             cbind(rnorm(40) * 2 + 13, rnorm(40) + 48)
+#             cbind(c(-5.99864, -2.9265), c(37.387191, 43.2629))
+#             
+#         }, ignoreNULL = FALSE)
+        points <- reactive({
+            cbind(c(-5.99864, -2.9265), c(37.387191, 43.2629))
+            
+        })
+       
+        output$map <- renderLeaflet({
+            leaflet() %>%
+                # http://leaflet-extras.github.io/leaflet-providers/preview/
+                addProviderTiles("CartoDB.Positron",
+                                 options = providerTileOptions(noWrap = TRUE)
+                ) %>%
+                addCircles(data = points(), opacity = 1, radius = 100)
+        })
+        
+        output$tabla_mapa <- renderDataTable({
+            print(points())
+            datatable(data.frame(Ciudad = c("SEVILLA", "BILBAO"),
+                                 lng = points()[,1],
+                                 lat = points()[,2]),
+                      extensions = list('TableTools', "Scroller"), options = list(
+                          dom = 'T<"clear">lfrtip',
+                          tableTools = list(sSwfPath = copySWF())
+                          ,   deferRender = TRUE,
+                          dom = "frtiS",
+                          scrollY = 200,
+                          scrollCollapse = TRUE
+                      )
+            )
+        })
+        
         # ---------------------
         
         output$selector_fechas <- renderUI({
@@ -83,7 +121,7 @@ shinyServer(
                         multiple = T, selected = list(1, 2))
         })
         
-        # Hoja Dashboard
+        # Hoja Dashboard -------------
         
         output$selector_kpi_1 <- renderUI({
             selectInput("selector_kpi_1", label = "Seleccionar métrica", 

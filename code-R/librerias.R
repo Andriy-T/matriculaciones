@@ -17,6 +17,21 @@ library(devtools)
 if(!require(rCharts)) install_github('rCharts', 'ramnathv')
 library(rCharts)
 
+# require(devtools)
+# # install_github('ramnathv/rCharts@dev')
+# # install_github('ramnathv/rMaps')
+# 
+# library(rMaps)
+# 
+# if(!require(rjson)) install.packages("rjson")
+# library(rjson)
+
+if(!require(leaflet)) install.packages("leaflet")
+library(leaflet)
+
+if(!require(DT)) install.packages("DT")
+library(DT)
+
 if(!require(dplyr)) install.packages("dplyr")
 library(dplyr)
 

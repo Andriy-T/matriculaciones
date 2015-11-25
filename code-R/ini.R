@@ -25,14 +25,16 @@ fechIni  <- as.Date('2014-12-01')
 fechEnd  <- as.Date('2015-09-30')
 
 # cargar librerias
-cat ("Cargando librerias \n")
+cat ("Cargando librerias... \n")
 source(file.path(DirCode, "librerias.R"))
+cat ("Librerias cargadas! \n")
 # cargar funciones
-cat ("Cargando funciones \n")
+cat ("Cargando funciones... \n")
 if(CargaIniPro) source(file.path(DirCode, "funciones.R"))
 # cargar data
+cat ("Funciones cargadas! \n")
 
-cat ("Cargando data \n")
+cat ("Cargando data... \n")
 # if(CargaIniPro) source(file.path(DirCode, "data.R"))
 
 #### Carga datos ####
@@ -51,13 +53,16 @@ if (Fast){
     readRDS(file.path(DirDat, fichDatTur))
   setDT(data_set_def) 
 } else{ source(file.path(DirCode, "data_slow.R")) }
+cat ("Data OK! \n")
 
 
 # cargar tablas
-cat ("Cargando tablas \n")
+cat ("Cargando tablas... \n")
 if(CargaIniPro) source(file.path(DirCode, "tablas.R"))
+cat ("Tablas OK! \n")
 
 # generar los graficos
-cat ("Dibujando los graficos \n")
+cat ("Dibujando los graficos... \n")
 if(CargaIniPro) source(file.path(DirCode, "graficos.R"))
+cat ("Gráficos OK! \n")
 

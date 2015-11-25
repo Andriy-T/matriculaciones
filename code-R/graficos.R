@@ -20,7 +20,7 @@ graf.ts_matric$title(text = 'Evolución mensual')
 # Opciones del grafico
 # graf.ts_matric$chart(zoomType = "x")
 graf.ts_matric$params$width ="100%"
-graf.ts_matric$params$height = 280
+graf.ts_matric$params$height = 360
 # graf.ts_matric$exporting(enabled=T)
 
 graf.ts_matric$plotOptions(
@@ -49,7 +49,7 @@ graf.ts_matric$yAxis(
 # devolver codigo html del objeto
 # graf.ts_matric$show("inline", include_assets = FALSE)
 
-graf.ts_matric
+# graf.ts_matric
 
 ########################################################+
 # Graficos descriptivos
@@ -62,6 +62,9 @@ graf.ts_matric
 graf.topMarca <- hPlot(Matriculaciones ~ Marca, data = matric_topMarca
                      , type = "bar"
 )
+
+graf.topMarca$params$width ="100%"
+graf.topMarca$params$height = 360
 
 # Titulo
 graf.topMarca$title(text = 'Top marcas', align = "left")
@@ -102,10 +105,7 @@ graf.topMarca$xAxis(
     , title = list(text = '')
 )
 
-graf.topMarca$params$width ="100%"
-graf.topMarca$params$height = 280
-
-graf.topMarca
+# graf.topMarca
 
 # ------------------------------------------------------+
 # Propulsion --------------
@@ -126,6 +126,9 @@ graf.dsc.prop <- hPlot(matric ~ prop, data = matric_prop_tot
                        , type = "pie"
                        # , options = list(innerSize = "20%")
                        )
+
+graf.dsc.prop$params$width ="100%"
+graf.dsc.prop$params$height = 720
 
 graf.dsc.prop$title(
     text = 'Matric. por <br>propulsion</br>',
@@ -161,10 +164,8 @@ graf.dsc.prop$tooltip(
 )
 
 graf.dsc.prop$legend(enabled = T)
-graf.dsc.prop$params$width ="100%"
-graf.dsc.prop$params$heigth = 360
 
-graf.dsc.prop
+# graf.dsc.prop
 
 # ------------------------------------------------------+
 # Cilindrada (ejemplo de bar chart) --------------
@@ -178,6 +179,9 @@ graf.dsc.cilin <- hPlot(matric ~ cilin, data = matric_cilin_tot
                        , type = "column"
                        # , options = list(innerSize = "20%")
                        )
+
+graf.dsc.cilin$params$width ="100%"
+graf.dsc.cilin$params$height = 240
 
 graf.dsc.cilin$title(
     text = 'Matriculaciones por tramo de cilindrada',
@@ -220,10 +224,7 @@ graf.dsc.cilin$yAxis(
     )
 )
 
-graf.dsc.cilin$params$width ="100%"
-graf.dsc.cilin$params$height = 240
-
-graf.dsc.cilin
+# graf.dsc.cilin
 
 
 # ------------------------------------------------------+
@@ -238,6 +239,11 @@ graf.dsc.cv <- hPlot(matric ~ cv, data = matric_powerKW_ITV_tot
                        , type = "column"
                        # , options = list(innerSize = "20%")
                        )
+
+
+graf.dsc.cv$params$width ="100%"
+graf.dsc.cv$params$height = 240
+
 
 graf.dsc.cv$title(
     text = 'Matriculaciones por tramo de potencia (cv)',
@@ -280,10 +286,7 @@ graf.dsc.cv$yAxis(
     )
 )
 
-graf.dsc.cv$params$width ="100%"
-graf.dsc.cv$params$heigth = 240
-
-graf.dsc.cv
+# graf.dsc.cv
 
 
 
