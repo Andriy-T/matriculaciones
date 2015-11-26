@@ -82,7 +82,7 @@ matric_prop_tot <- data_set_def[, .N, by = COD_PROPULSION_ITV]
 setkey(matric_prop_tot, COD_PROPULSION_ITV)
 
 # claves primarias para poder unir las tablas
-tmp_aux <- data_aux$COD_PROPULSION
+tmp_aux <- data_aux$COD_PROPULSION_ITV
 setDT(tmp_aux)
 setkey(tmp_aux, COD_PROPULSION)
 

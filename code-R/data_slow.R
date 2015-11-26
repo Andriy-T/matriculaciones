@@ -18,7 +18,7 @@
 #   HojMod <- "Estudio modelos veh"
 # fechIni  <- as.Date('2014-12-01')
 # fechEnd  <- as.Date('2015-09-30')
-
+# 
 col_sel <- c("FEC_MATRICULA", "MARCA_ITV", "MODELO_ITV"
              , "COD_PROCEDENCIA_ITV", "COD_TIPO", "COD_PROPULSION_ITV", "CILINDRADA_ITV"
              , "POTENCIA_ITV", "COD_PROVINCIA_MAT", "CODIGO_POSTAL"
@@ -135,9 +135,9 @@ data_set[, MARCA_ITV := substr(as.character(MARCA_ITV),1,23)]
 data_set[, MODELO_ITV := as.character(gsub("^\\s+|\\s+$", "",MODELO_ITV))]
 
 # marca 1 = primera palabra de la marca 
+f1 <- function(x){x[1]}
 data_set$marca1 <-   sapply(data_set$MARCA_ITV, strsplit, " ", simplify = T,fixed= T)
 data_set$marca1 <-   sapply(data_set$marca1, f1, simplify = T)
-f1 <- function(x){x[1]}
 
 # modelo 1 = primera palabra de la marca 
 data_set$modelo1 <- sapply(as.character(data_set$MODELO_ITV), strsplit, " ", simplify = T,fixed= T)
