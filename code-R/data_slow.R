@@ -5,9 +5,12 @@
 ###  NO carga los datos auxiliares
 ###################################################################################+
 
+# Parametros
 # lee raw data
 # filtros
-# Parametros
+# cambios en los modelos
+# convertir en factores
+# filtraremos por marca/modelo
 
 #### Parametros
 # los parametros  de carga se especifican en ini.r
@@ -18,7 +21,7 @@
 #   HojMod <- "Estudio modelos veh"
 # fechIni  <- as.Date('2014-12-01')
 # fechEnd  <- as.Date('2015-09-30')
-# 
+
 col_sel <- c("FEC_MATRICULA", "MARCA_ITV", "MODELO_ITV"
              , "COD_PROCEDENCIA_ITV", "COD_TIPO", "COD_PROPULSION_ITV", "CILINDRADA_ITV"
              , "POTENCIA_ITV", "COD_PROVINCIA_MAT", "CODIGO_POSTAL"
@@ -122,6 +125,7 @@ gc()
 # 1 para grÃ¡ficos-descriptivos generales (turismos principalmente)
 # 2 para evoluciones por marca (aqui seleccionamos las principales)
 
+#### cambios en los modelos
 
 # Unificamos en los modelos de vehciculos
 # 1 eliminamos espacios y caracteres raros
@@ -138,6 +142,7 @@ data_set[, MODELO_ITV := as.character(gsub("^\\s+|\\s+$", "",MODELO_ITV))]
 f1 <- function(x){x[1]}
 data_set$marca1 <-   sapply(data_set$MARCA_ITV, strsplit, " ", simplify = T,fixed= T)
 data_set$marca1 <-   sapply(data_set$marca1, f1, simplify = T)
+
 
 # modelo 1 = primera palabra de la marca 
 data_set$modelo1 <- sapply(as.character(data_set$MODELO_ITV), strsplit, " ", simplify = T,fixed= T)
@@ -168,7 +173,6 @@ data_set[, codItv2 :=  substr(as.character(CODIGO_ITV),1,8)]
 data_set2 <- copy(data_set)
 setkey(data_set2,"codItv2")
 data_set2 <- data_set2[codItv2 != "        "]
-data_set2 <- data_set2[modelo2 != ""]
 
 # asignar la marca más frecuente a cada codItv2
 data_set2[,N:=.N, by = "codItv2,marca2"] 
@@ -176,17 +180,18 @@ data_set2[,M:=max(N), by= "codItv2"]
 tab <- data_set2[N == M, c("codItv2","MARCA_ITV","marca1","marca2"),with = F]
 setkeyv(tab,c("codItv2"))
 tab <- unique(tab)
+data_set2[,M := NULL]
+data_set2[,N := NULL]
 data_set2[,MARCA_ITV := NULL]
 data_set2[,marca1 := NULL]
 data_set2[,marca2 := NULL]
-data_set2[,M := NULL]
-data_set2[,N := NULL]
 # data_set2[,MARCA_ITV := NULL]
 data_set2  <- merge(data_set2, tab, all.x = F,by.x = c("codItv2"), by.y = c("codItv2"))
+data_set2 <- rbind(data_set2,data_set[codItv2 == "        "])
+
 #eliminamos del MODELO_ITV la marca
 data_set2[, MODELO_ITV :=  mapply(gsub, marca2, "", MODELO_ITV, fixed= T)]
 data_set2[, MODELO_ITV :=  mapply(gsub, marca1, "", MODELO_ITV, fixed= T)]
-data_set2 <- rbind(data_set2,data_set[codItv2 == "        " | modelo2 == ""])
 
 # 
 # kk <-data_set2[marca2.x!=marca2.y]
@@ -199,28 +204,32 @@ data_set2 <- rbind(data_set2,data_set[codItv2 == "        " | modelo2 == ""])
 
 
 # asignar el 'MODELO_ITV' más frecuente a cada codItv2
+# XXX habría que quitar los modelos en blanco por si son el más frecuente
 # data_set  <-  data_set[marca2 == "BMW"]
+data_set2_blancos <- data_set2[codItv2 == "        "]
+data_set2 <- data_set2[codItv2 != "        "]
 data_set2[,N:=.N, by = "codItv2,MODELO_ITV"] 
 data_set2[,M:=max(N), by= "codItv2"] 
 tab <- data_set2[N == M, c("MODELO_ITV","codItv2","modelo1","modelo2","MARCA_ITV","marca2"),with = F]
 setkeyv(tab,c("codItv2"))
 tab <- unique(tab)
+data_set2[,M := NULL]
+data_set2[,N := NULL]
 data_set2[,MODELO_ITV := NULL]
 data_set2[,modelo1 := NULL]
 data_set2[,modelo2 := NULL]
 data_set2[,MARCA_ITV := NULL]
 data_set2[,marca2 := NULL]
-data_set2[,M := NULL]
-data_set2[,N := NULL]
 # data_set2[,MARCA_ITV := NULL]
 data_set2  <- merge(data_set2, tab, all.x = F,by.x = c("codItv2"), by.y = c("codItv2"))
-data_set2 <- rbind(data_set2,data_set[codItv2 == "        " | modelo2 == ""])
+data_set2 <- rbind(data_set2,data_set2_blancos)
 
 # kk <- data_set_def[data_set_def$MODELO_ITV.x != data_set_def$MODELO_ITV.y, c("codItv2","MODELO_ITV.x","MODELO_ITV.y", "MARCA_ITV.x","MARCA_ITV.y","marca2.x","marca2.y","modelo2.x","modelo2.y"),with =F]
 # View(kk)
+
 # asignar el 'MODELO_ITV' más frecuente a cada modelo2
 # data_set2  <-  data_set[marca2 == "BMW"]
-data_set2_noMod  <-  data_set2[modelo2 == ""]
+data_set2_blancos  <-  data_set2[modelo2 == ""]
 data_set2  <-  data_set2[modelo2 != ""]
 setkey(data_set2,"marca2")
 data_set2[,N:=.N, by = "marca2,MODELO_ITV"] 
@@ -229,27 +238,23 @@ data_set2[,M:=max(N), by= "marca2,modelo2"]
 tab <- data_set2[N == M, c("modelo2", "MODELO_ITV", "marca2","modelo1"),with = F]
 setkeyv(tab,c("modelo2", "marca2"))
 tab <- unique(tab)
-data_set2[,MODELO_ITV := NULL]
-data_set2[,modelo1 := NULL]
 data_set2[,M := NULL]
 data_set2[,N := NULL]
+data_set2[,MODELO_ITV := NULL]
+data_set2[,modelo1 := NULL]
 data_set2  <- merge(data_set2, tab, all.x = F,by.x = c("modelo2", "marca2"), by.y = c("modelo2", "marca2"))
 # kk <- head(data_set0, 100)
-data_set2 <- rbind(data_set2,data_set2_noMod)
+data_set2 <- rbind(data_set2,data_set2_blancos)
+
+
 # seleccionamos las columnas que vamos a utilizar para los graficos
 # data_set[,.N, by= CLASIFICACION_REGLAMENTO_VEHICULOS_ITV][order(N, decreasing = T)]
-data_set2[,CODIGO_ITV := as.factor(codItv2)]
-data_set2[,MARCA_ITV := as.factor(MARCA_ITV)]
-data_set2[,MODELO_ITV:= as.factor(MODELO_ITV)]
-data_set2[,modelo1:= as.factor(modelo1)]
 data_set2 <- data_set2[,col_sel, with=F]
 
 
-# filtraremos por marca/modelo
+#### filtraremos por marca/modelo
 
-# Pasar las columnas apropiadas a factor
-
-
+#### convertir en factores
 data_set_def <- data_set2
+for (c in col_sel) {data_set2[[c]] <- as.factor(data_set2[[c]])}
 saveRDS(data_set2, file.path(DirDat, fichDatTur))
-

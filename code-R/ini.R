@@ -49,11 +49,18 @@ data_modelos <-
 
 if (Fast){
   # Data Turismos (procesado)
-  data_set_def <- 
+  data_set_def <-
     readRDS(file.path(DirDat, fichDatTur))
+  data_set_def$FEC_MATRICULA  <- as.Date(data_set_def$FEC_MATRICULA ,"%Y-%m-%d") 
+  data_set_def$CILINDRADA_ITV <- as.numeric(as.character(data_set_def$CILINDRADA_ITV ))
+  data_set_def$KW_ITV         <- as.numeric(as.character(data_set_def$KW_ITV))
+  data_set_def$POTENCIA_ITV <- as.numeric(as.character(data_set_def$POTENCIA_ITV))
+  data_set_def$NUM_PLAZAS <- as.numeric(as.character(data_set_def$NUM_PLAZAS))
+  data_set_def$CO2_ITV <- as.numeric(as.character(data_set_def$CO2_ITV))
+  data_set_def$CONSUMO.WH.KM_ITV <- as.numeric(as.character(data_set_def$CONSUMO.WH.KM_ITV))
   setDT(data_set_def) 
 } else{ source(file.path(DirCode, "data_slow.R")) }
-cat ("Data OK! \n")
+cat ("Data OK! \n") 
 
 
 # cargar tablas
