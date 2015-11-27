@@ -28,6 +28,7 @@ col_sel <- c("FEC_MATRICULA", "MARCA_ITV", "MODELO_ITV"
              , "PERSONA_FISICA_JURIDIC", "KW_ITV", "NUM_PLAZAS", "CO2_ITV", "FABRICANTE_ITV"
              , "CATEGORIA_HOMOLOGACION_EUROPEA_ITV", "NIVEL_EMISIONES_EURO_ITV"
              , "CONSUMO.WH.KM_ITV", "CLASIFICACION_REGLAMENTO_VEHICULOS_ITV"
+             , "MUNICIPIO", "COD_PROVINCIA_VEH"
              , "modelo1"
 )
 colFech <- c("FEC_MATRICULA","FEC_TRAMITACION","FEC_TRAMITE","FEC_PRIM_MATRICULACION","FEC_PROCESO")
@@ -251,8 +252,10 @@ data_set2 <- rbind(data_set2,data_set2_blancos)
 # data_set[,.N, by= CLASIFICACION_REGLAMENTO_VEHICULOS_ITV][order(N, decreasing = T)]
 data_set2 <- data_set2[,col_sel, with=F]
 
-
 #### filtraremos por marca/modelo
+data_set2$MUNICIPIO <- gsub("^\\s+|\\s+$", "",as.character(data_set2$MUNICIPIO))
+data_set2$COD_PROVINCIA_VEH <- gsub("^\\s+|\\s+$", "",as.character(data_set2$COD_PROVINCIA_VEH))
+
 
 #### convertir en factores
 data_set_def <- data_set2
