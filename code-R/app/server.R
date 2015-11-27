@@ -4,6 +4,9 @@ require(shinydashboard)
 shinyServer(
     function(input, output) {
         
+        rm(list=ls(pattern = "graf[.]"))
+        source(file.path(DirCode, "graficos.R"))
+        
         # Hoja resumen ------------------------------------------------------
         
         output$res_matric_mes <- renderValueBox({
@@ -66,24 +69,58 @@ shinyServer(
 #             
 #         }, ignoreNULL = FALSE)
         points <- reactive({
-            cbind(c(-5.99864, -2.9265), c(37.387191, 43.2629))
+            
+            dat <- matric_provincia_tot[provincia!="Santa Cruz de Tenerife" &
+                                            provincia!="Palmas (Las)" &
+                                            provincia!="Ceuta" &
+                                            provincia!="Melilla",]
+            
+            as.matrix(cbind(dat$Longitud, dat$Latitud))
+            
+            # cbind(c(-5.99864, -2.9265), c(37.387191, 43.2629))
             
         })
        
+#         output$map <- renderLeaflet({
+#             leaflet() %>%
+#                 # http://leaflet-extras.github.io/leaflet-providers/preview/
+#                 addProviderTiles("CartoDB.Positron",
+#                                  options = providerTileOptions(noWrap = TRUE)
+#                 ) %>%
+#                 addCircles(data = points(), opacity = 1, radius = 100)
+#         })
+        dat <- matric_provincia_tot[provincia!="Santa Cruz de Tenerife" &
+                                        provincia!="Palmas (Las)" &
+                                        provincia!="Ceuta" &
+                                        provincia!="Melilla",]
+        
         output$map <- renderLeaflet({
-            leaflet() %>%
+            
+            pal <- colorNumeric("PRGn", dat$matric)
+            
+            leaflet(dat) %>%
                 # http://leaflet-extras.github.io/leaflet-providers/preview/
-                addProviderTiles("CartoDB.Positron",
+                addProviderTiles("Stamen.TonerLite",
                                  options = providerTileOptions(noWrap = TRUE)
                 ) %>%
-                addCircles(data = points(), opacity = 1, radius = 100)
+                # addTiles() %>%
+                fitBounds(~min(Longitud), ~min(Latitud)
+                          , ~max(Longitud), ~max(Latitud)) %>%
+                addCircles(
+                    # radius = ~log(matric_provincia_tot$matri,2)*1000
+                    radius = ~matric/3
+                           , lng = ~Longitud, lat = ~Latitud
+                           , weight = 1, color = "#777777",
+                           fillColor = ~pal(matric), fillOpacity = 0.7
+                           , popup = ~paste(provincia, matric)
+                )
         })
         
         output$tabla_mapa <- renderDataTable({
-            print(points())
-            datatable(data.frame(Ciudad = c("SEVILLA", "BILBAO"),
-                                 lng = points()[,1],
-                                 lat = points()[,2]),
+            datatable(matric_provincia_tot[provincia!="Santa Cruz de Tenerife" &
+                                               provincia!="Palmas (Las)" &
+                                               provincia!="Ceuta" &
+                                               provincia!="Melilla",],
                       extensions = list('TableTools', "Scroller"), options = list(
                           dom = 'T<"clear">lfrtip',
                           tableTools = list(sSwfPath = copySWF())
@@ -181,27 +218,16 @@ shinyServer(
         
         output$selector_tabla <- renderUI({
             selectInput("selector_tabla", label = "Seleccionar tabla", 
-                        choices = list("KPI", "TV"), 
+                        choices = lista_tablas,
                         selected = 1)
         })
         
         data_export <- reactive({
-            switch(input$selector_tabla,
-                   "KPI" = data_kpi,
-                   "TV" = data_tv)
+            get(input$selector_tabla)
         })
         
         output$tabla <- renderDataTable({
-            datatable(data_export(),
-                      extensions = list('TableTools', "Scroller"), options = list(
-                          dom = 'T<"clear">lfrtip',
-                          tableTools = list(sSwfPath = copySWF())
-                          ,   deferRender = TRUE,
-                          dom = "frtiS",
-                          scrollY = 200,
-                          scrollCollapse = TRUE
-                      )
-            )
+            data_export()
         })
         
         output$downloadData <- downloadHandler(

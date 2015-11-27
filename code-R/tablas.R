@@ -195,7 +195,51 @@ matric_powerKW_ITV_tot <- matric_powerKW_ITV_tot[order(tramos, decreasing = F)]
 setnames(matric_powerKW_ITV_tot, 
          names(matric_powerKW_ITV_tot), c("cv", "matric"))
 
+########################################################################################+
+# Comunidades ----
+########################################################################################+
 
+matric_codpost_tot <- data_set_def[, .N, by = CODIGO_POSTAL]
+
+data_aux$COD_PROVINCIA
+
+
+# claves primarias para poder unir las tablas
+matric_provincia_tot <- data_set_def[, .N, by = COD_PROVINCIA_MAT]
+setkey(matric_provincia_tot, COD_PROVINCIA_MAT)
+
+# claves primarias para poder unir las tablas
+tmp_aux <- data_aux$COD_PROVINCIA
+setDT(tmp_aux)
+setkey(tmp_aux, COD_PROVINCIA_VEH)
+
+# union
+matric_provincia_tot <- tmp_aux[matric_provincia_tot][
+    , sum(N), by = DESCRIPCION]
+
+# Cambio de nombres a las columnas
+setnames(matric_provincia_tot, names(matric_provincia_tot), c("provincia", "matric"))
+
+# Eliminacion de NA
+matric_provincia_tot <- na.omit(matric_provincia_tot)
+
+# Ordenamos
+matric_provincia_tot <- matric_provincia_tot[order(matric, decreasing = T)]
+
+# coordenadas ---
+
+tmp_aux <- data_aux$COORDENADAS_PROV
+setDT(tmp_aux)
+setkey(tmp_aux, provincia)
+
+#cruzamos
+matric_provincia_tot <- tmp_aux[matric_provincia_tot]
+matric_provincia_tot <- na.omit(matric_provincia_tot)
+
+
+########################################################################################+
+
+lista_tablas <- ls(pattern = "matric_")
 
 ########################################################################################+
 # limpiar objetos temporales ----

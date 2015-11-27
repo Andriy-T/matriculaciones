@@ -87,6 +87,11 @@ shinyUI(
                                       ),  
                                       box(
                                           dataTableOutput("tabla_mapa")
+                                          , h3(
+                                              paste("Pendiente reescalar tamaños de las bolas",
+                                               "manteniendo distancias en volumen", 
+                                               "entre las provincias")
+                                          )
                                           , width = 4, height = 520
                                   )
                           )),
@@ -97,11 +102,6 @@ shinyUI(
                                          , downloadButton('downloadData', 'Download')),
                                   hr(),
                                   dataTableOutput(outputId="tabla"))
-                          # ,
-                          #         tabItem(tabName = "mapa"
-                          #                 ,   leafletOutput("map", width = "100%", height = "100%")
-                          # 
-                          #       )
                       )
                   )
     ))
