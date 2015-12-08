@@ -3,7 +3,7 @@
 ##################################################################
 
 if (Sys.info()["user"] == "Alfonso") DirCode <- "C:/Alfonso/cosas/software/R/matriculaciones/code-R" else
-  DirCode <- "C:/Users/Andrey/Documents/GitHub/matriculaciones/code-R" 
+  DirCode <- "C:/Users/Andrey/Documents/Matriculaciones/matric_proj/matriculaciones/code-R" 
 
 #### directorio Proyecto y librerias ####
 if (Sys.info()["user"] == "Alfonso") DirPro  <- "C:/Users/Alfonso/Dropbox/proyectos/dgt" else
