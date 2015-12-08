@@ -43,3 +43,8 @@ library(xlsx)
 
 if(!require(jsonlite)) install.packages("jsonlite")
 library(jsonlite)
+
+# para gtrends demo
+# library(devtools)
+# devtools::install_github("dvanclev/GTrendsR")
+# devtools::install_github("trinker/gtrend")

@@ -2,27 +2,40 @@
 # fichero a ejecutar al iniciarla sesion
 ##################################################################
 
-if (Sys.info()["user"] == "Alfonso") DirCode <- "C:/Alfonso/cosas/software/R/matriculaciones/code-R" else
-  DirCode <- "C:/Users/Andrey/Documents/Matriculaciones/matric_proj/matriculaciones/code-R" 
-
-#### directorio Proyecto y librerias ####
-if (Sys.info()["user"] == "Alfonso") DirPro  <- "C:/Users/Alfonso/Dropbox/proyectos/dgt" else
-  DirPro  <- "C:/Users/Andrey/Dropbox/dgt"
-
-
-CargaIniPro <- T # si CargaIniPro es TRUE cargamos las librerias, funciones y datos
-                    # en otro caso solamente se cargan las librerias
-Fast  <- T  #Si Fast es TRUE se recupera la última carga de datos almacenada en disco. Si no se recargan los ficheros originales
+# Directorio de codigos
+DirCode <- switch(Sys.info()["user"],
+  "Alfonso" = "C:/Alfonso/cosas/software/R/matriculaciones/code-R",
+  "Andrey" = "C:/Users/Andrey/Documents/Matriculaciones/matric_proj/matriculaciones/code-R"
+                  )
+    
+# Directorio Proyecto y librerias
+DirPro <- switch(Sys.info()["user"],
+                  "Alfonso" = "C:/Users/Alfonso/Dropbox/proyectos/dgt",
+                  "Andrey" = "C:/Users/Andrey/Dropbox/dgt"
+)
 
 #### Parametros  de carga ####
+
+# Modos de carga
+CargaIniPro <- T # si CargaIniPro es TRUE cargamos las librerias, funciones y datos
+                    # en otro caso solamente se cargan las librerias
+Fast  <- T  #Si Fast es TRUE se recupera la Ãºltima carga de datos almacenada en disco. Si no se recargan los ficheros originales
+
+# Periodo
+fechIni  <- as.Date('2014-12-01')
+fechEnd  <- as.Date('2015-09-30')
+
+# directorio datos
 DirDat   <- file.path(DirPro, "data" )
+# nombres de ficheros con datos de matriculaciones
 fichDatRaw  <- "dat201412201509.rds" #fichDat  <- "dat201412201503.rds"
 fichDatTur  <- "datTur201412201509.rds" #fichDat  <- "dat201412201503.rds"
+# nombres de ficheros con tablas auxiliares
 fichAux  <- "tablas_aux.rds" 
 fichMod  <- "modelos.xlsx"
 HojMod <- "Estudio modelos veh"
-fechIni  <- as.Date('2014-12-01')
-fechEnd  <- as.Date('2015-09-30')
+
+# Ejecucion de codigos ######
 
 # cargar librerias
 cat ("Cargando librerias... \n")
@@ -48,18 +61,10 @@ data_modelos <-
             , header = T, stringsAsFactors = F)
 
 if (Fast){
-  # Data Turismos (procesado)
-  data_set_def <-
-    readRDS(file.path(DirDat, fichDatTur))
-  data_set_def$FEC_MATRICULA  <- as.Date(data_set_def$FEC_MATRICULA ,"%Y-%m-%d") 
-  data_set_def$CILINDRADA_ITV <- as.numeric(as.character(data_set_def$CILINDRADA_ITV ))
-  data_set_def$KW_ITV         <- as.numeric(as.character(data_set_def$KW_ITV))
-  data_set_def$POTENCIA_ITV <- as.numeric(as.character(data_set_def$POTENCIA_ITV))
-  data_set_def$NUM_PLAZAS <- as.numeric(as.character(data_set_def$NUM_PLAZAS))
-  data_set_def$CO2_ITV <- as.numeric(as.character(data_set_def$CO2_ITV))
-  data_set_def$CONSUMO.WH.KM_ITV <- as.numeric(as.character(data_set_def$CONSUMO.WH.KM_ITV))
-  setDT(data_set_def) 
-} else{ source(file.path(DirCode, "data_slow.R")) }
+    source(file.path(DirCode, "data_fast.R"))
+} else {
+    source(file.path(DirCode, "data_slow.R"))
+}
 cat ("Data OK! \n") 
 
 
@@ -71,5 +76,5 @@ cat ("Tablas OK! \n")
 # generar los graficos
 cat ("Dibujando los graficos... \n")
 if(CargaIniPro) source(file.path(DirCode, "graficos.R"))
-cat ("Gráficos OK! \n")
+cat ("GrÃ¡ficos OK! \n")
 
