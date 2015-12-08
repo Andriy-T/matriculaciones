@@ -12,7 +12,7 @@ if (Sys.info()["user"] == "Alfonso") DirPro  <- "C:/Users/Alfonso/Dropbox/proyec
 
 CargaIniPro <- T # si CargaIniPro es TRUE cargamos las librerias, funciones y datos
                     # en otro caso solamente se cargan las librerias
-Fast  <- T  #Si Fast es TRUE se recupera la ?ltima carga de datos almacenada en disco. Si no se recargan los ficheros originales
+Fast  <- T  #Si Fast es TRUE se recupera la última carga de datos almacenada en disco. Si no se recargan los ficheros originales
 
 #### Parametros  de carga ####
 DirDat   <- file.path(DirPro, "data" )
@@ -71,5 +71,5 @@ cat ("Tablas OK! \n")
 # generar los graficos
 cat ("Dibujando los graficos... \n")
 if(CargaIniPro) source(file.path(DirCode, "graficos.R"))
-cat ("Gr?ficos OK! \n")
+cat ("Gráficos OK! \n")
 
